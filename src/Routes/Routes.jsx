@@ -53,14 +53,14 @@ export default function Routes() {
      element: <ProtectedRoute>
       <TutorsDetail />
      </ProtectedRoute>,
-     loader: ({ params }) => fetch(`http://localhost:5000/tutors/${params.id}`),
+     loader: ({ params }) => fetch(`https://tutormateadminserver.vercel.app/tutors/${params.id}`),
     },
     {
      path: '/users',
      element: <ProtectedRoute>
       <Users />
      </ProtectedRoute>,
-     loader: () => fetch('http://localhost:5000/users'),
+     loader: () => fetch('https://tutormateadminserver.vercel.app/users'),
     }
    ]
   },

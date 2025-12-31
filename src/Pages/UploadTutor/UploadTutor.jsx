@@ -34,7 +34,7 @@ const UploadTutor = () => {
    cancelButtonColor: '#aaa',
   }).then((result) => {
    if (result.isConfirmed) {
-    fetch('http://localhost:5000/tutors', {
+    fetch('https://tutormateadminserver.vercel.app/tutors', {
      method: 'POST',
      body: formData,
     })

@@ -7,7 +7,7 @@ const ConfirmTutors = () => {
  const [confirmData, setConfirmData] = useState([]);
 
  useEffect(() => {
-  fetch('http://localhost:5000/confirm')
+  fetch('https://tutormateadminserver.vercel.app/confirm')
    .then(res => res.json())
    .then(data => setConfirmData(data))
  }, []);
@@ -27,7 +27,7 @@ const ConfirmTutors = () => {
    cancelButtonColor: '#aaa',
   }).then((result) => {
    if (result.isConfirmed) {
-    fetch(`http://localhost:5000/confirm/${_id}`, { method: 'DELETE' })
+    fetch(`https://tutormateadminserver.vercel.app/confirm/${_id}`, { method: 'DELETE' })
      .then(res => res.json())
      .then(data => {
       if (data.deletedCount > 0) {

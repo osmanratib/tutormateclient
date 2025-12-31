@@ -23,7 +23,7 @@ const Users = () => {
    cancelButtonColor: '#aaa',
   }).then((result) => {
    if (result.isConfirmed) {
-    fetch(`http://localhost:5000/users/${_id}`, {
+    fetch(`https://tutormateadminserver.vercel.app/users/${_id}`, {
      method: 'DELETE',
     })
      .then(res => res.json())
@@ -48,15 +48,15 @@ const Users = () => {
  };
 
  return (
-  <div> 
- 
+  <div>
+
    <div className='flex justify-center items-center'>
     <Menu />
    </div>
 
    <div className="content flex items-center justify-center">
     <h1 className="text-[40px] font-BBH">Users</h1>
-   </div> 
+   </div>
 
 
 

@@ -25,7 +25,7 @@ const SignUP = () => {
 
   createUser(email, password, name)
    .then(() => {
-    fetch('http://localhost:5000/users', {
+    fetch('https://tutormateadminserver.vercel.app/users', {
      method: "POST",
      headers: { "Content-Type": "application/json" },
      body: JSON.stringify({ name, email })
@@ -47,7 +47,7 @@ const SignUP = () => {
    .then(result => {
     const user = result.user;
 
-    fetch('http://localhost:5000/users', {
+    fetch('https://tutormateadminserver.vercel.app/users', {
      method: "POST",
      headers: { "Content-Type": "application/json" },
      body: JSON.stringify({
