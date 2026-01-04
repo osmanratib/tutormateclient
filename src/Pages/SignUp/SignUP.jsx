@@ -39,7 +39,7 @@ const SignUP = () => {
    const result = await createUser(email, password);
    await sendEmailVerification(result.user);
 
-   await fetch("https://tutormateadminserver.vercel.app/users", {
+   await fetch("https://tutormate-server.vercel.app/users", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ name, email }),
@@ -66,7 +66,7 @@ const SignUP = () => {
    const result = await googleSignIn();
    const user = result.user;
 
-   await fetch("https://tutormateadminserver.vercel.app/users", {
+   await fetch("https://tutormate-server.vercel.app/users", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({

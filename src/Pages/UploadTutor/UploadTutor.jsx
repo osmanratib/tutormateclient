@@ -41,7 +41,7 @@ const UploadTutor = () => {
    });
 
    if (result.isConfirmed) {
-    const response = await fetch('https://tutormateadminserver.vercel.app/tutors', {
+    const response = await fetch('https://tutormate-server.vercel.app/tutors', {
      method: 'POST',
      body: formData,
     });

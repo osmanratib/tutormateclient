@@ -23,7 +23,7 @@ const Users = () => {
    cancelButtonColor: '#aaa',
   }).then((result) => {
    if (result.isConfirmed) {
-    fetch(`https://tutormateadminserver.vercel.app/users/${_id}`, {
+    fetch(`https://tutormate-server.vercel.app/users/${_id}`, {
      method: 'DELETE',
     })
      .then(res => res.json())

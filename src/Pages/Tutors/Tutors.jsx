@@ -11,7 +11,7 @@ const Tutors = () => {
 
 
  useEffect(() => {
-  fetch('https://tutormateadminserver.vercel.app/tutors')
+  fetch('https://tutormate-server.vercel.app/tutors')
    .then(res => res.json())
    .then(data => setData(data));
  }, [])
@@ -35,7 +35,7 @@ const Tutors = () => {
     const newData = [...confirm, data];
     setConfirm(newData);
 
-    fetch('https://tutormateadminserver.vercel.app/confirm', {
+    fetch('https://tutormate-server.vercel.app/confirm', {
      method: 'POST',
      headers: {
       'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ const Tutors = () => {
    cancelButtonColor: '#aaa',
   }).then((result) => {
    if (result.isConfirmed) {
-    fetch(`https://tutormateadminserver.vercel.app/tutors/${_id}`, {
+    fetch(`https://tutormate-server.vercel.app/tutors/${_id}`, {
      method: 'DELETE',
     })
      .then(res => res.json())
