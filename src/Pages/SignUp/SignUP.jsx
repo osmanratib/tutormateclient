@@ -1,171 +1,141 @@
 import { FaGoogle } from "react-icons/fa";
-import { Link, useNavigate } from 'react-router-dom';
-import { useContext } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useContext, useState } from "react";
 import { AuthContext } from "../../Context/AuthProvider";
 import Swal from "sweetalert2";
+import { sendEmailVerification } from "firebase/auth";
 
 const SignUP = () => {
  const { createUser, googleSignIn } = useContext(AuthContext);
  const navigate = useNavigate();
+ const [error, setError] = useState("");
+
+ // 🔹 Convert Firebase errors to one-line messages
+ const getErrorMessage = (err) => {
+  if (err.includes("email-already")) return "Email already registered";
+  if (err.includes("weak-password")) return "Password must be at least 6 characters";
+  if (err.includes("invalid-email")) return "Invalid email format";
+  if (err.includes("popup-closed")) return "Google popup closed";
+  return "Something went wrong. Try again.";
+ };
 
  // 🔹 Email/Password Sign Up
- const handleAuth = (e) => {
+ const handleAuth = async (e) => {
   e.preventDefault();
+  setError("");
 
   const form = e.target;
-  const name = form.name.value;
-  const email = form.email.value;
+  const name = form.name.value.trim();
+  const email = form.email.value.trim();
   const password = form.password.value;
   const confirmPassword = form.confirmPassword.value;
 
   if (password !== confirmPassword) {
-   Swal.fire('Error', 'Passwords do not match', 'error');
+   setError("Passwords do not match");
    return;
   }
 
-  createUser(email, password, name)
-   .then(() => {
-    fetch('https://tutormateadminserver.vercel.app/users', {
-     method: "POST",
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify({ name, email })
-    });
+  try {
+   const result = await createUser(email, password);
+   await sendEmailVerification(result.user);
 
-    form.reset();
-    Swal.fire({
-     title: 'Registered!',
-     icon: 'success',
-     timer: 2000
-    }).then(() => navigate('/signin'));
-   })
-   .catch(error => Swal.fire('Error', error.message, 'error'));
+   await fetch("https://tutormateadminserver.vercel.app/users", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ name, email }),
+   });
+
+   Swal.fire({
+    icon: "success",
+    title: "Verify your email",
+    text: "A verification link has been sent to your email",
+    timer: 2500,
+   });
+
+   form.reset();
+   navigate("/signin");
+  } catch (err) {
+   setError(getErrorMessage(err.message));
+  }
  };
 
  // 🔹 Google Sign Up
- const handleGoogleSignUp = () => {
-  googleSignIn()
-   .then(result => {
-    const user = result.user;
+ const handleGoogleSignUp = async () => {
+  setError("");
+  try {
+   const result = await googleSignIn();
+   const user = result.user;
 
-    fetch('https://tutormateadminserver.vercel.app/users', {
-     method: "POST",
-     headers: { "Content-Type": "application/json" },
-     body: JSON.stringify({
-      name: user.displayName,
-      email: user.email
-     })
-    });
+   await fetch("https://tutormateadminserver.vercel.app/users", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+     name: user.displayName,
+     email: user.email,
+    }),
+   });
 
-    Swal.fire({
-     title: 'Welcome!',
-     text: 'Signed up with Google',
-     icon: 'success',
-     timer: 1500
-    }).then(() => navigate('/'));
-   })
-   .catch(error => Swal.fire('Error', error.message, 'error'));
+   Swal.fire({
+    icon: "success",
+    title: "Welcome!",
+    timer: 1500,
+   });
+
+   navigate("/");
+  } catch (err) {
+   setError(getErrorMessage(err.message));
+  }
  };
 
  return (
-  <div className='flex items-center justify-center '>
-   <div className='border-2 rounded-xl shadow-xl shadow-white border-red-500  p-9  text-center '>
-    <div className="content">
-     <h1 className='font-BBH text-[25px]'>signup</h1>
-    </div>
+  <div className="min-h-screen flex items-center justify-center px-4">
+   <div className="w-full max-w-md border-2 border-red-500 rounded-xl shadow-xl p-6 sm:p-8 text-center">
 
-    {/* GOOGLE SIGN UP */}
-    <div className="googleAuth flex justify-center ">
-     <button
-      onClick={handleGoogleSignUp}
-      className='m-3 capitalize flex gap-2 font-Alegreya items-center justify-center bg-[#fff] text-black px-5 py-1 rounded font-bold '
-     >
-      <span className='text-black bg-black px-3 py-1 rounded-full'>
-       <FaGoogle />
-      </span>
-      sign up with google
-     </button>
-    </div>
+    <h1 className="text-2xl font-bold mb-4">Sign Up</h1>
 
-    <div className=' text-[17px] flex items-center justify-center gap-2'>
-     <div className='h-[1px] bg-white w-full'></div>
+    {/* Google Sign Up */}
+    <button
+     onClick={handleGoogleSignUp}
+     className="w-full flex items-center justify-center gap-3 bg-white text-black py-2 rounded font-bold mb-4"
+    >
+     <FaGoogle /> Sign up with Google
+    </button>
+
+    <div className="flex items-center gap-2 my-4">
+     <div className="flex-1 h-px bg-white" />
      or
-     <div className='h-[1px] bg-white w-full'></div>
+     <div className="flex-1 h-px bg-white" />
     </div>
 
-    {/* EMAIL / PASSWORD FORM — UNCHANGED */}
-    <form onSubmit={handleAuth} className='grid grid-cols-1 gap-3 justify-center items-center'>
+    {/* Error Message */}
+    {error && (
+     <p className="text-red-400 text-sm mb-3">{error}</p>
+    )}
 
-     <div>
-      <h1 className="text-white font-Alegreya font-bold text-[16px] flex items-center gap-3 mb-2">
-       name :
-      </h1>
-      <div className="name bg-white w-[300px] h-[50px] rounded-xl p-2 ">
-       <input
-        className="w-full h-full bg-white outline-none text-black"
-        type="text"
-        name="name"
-        placeholder="ratib"
-        required
-       />
-      </div>
-     </div>
+    {/* Email Form */}
+    <form onSubmit={handleAuth} className="space-y-3">
 
-     <div>
-      <h1 className="text-white font-Alegreya font-bold text-[16px] flex items-center gap-3 mb-2">
-       email :
-      </h1>
-      <div className="name bg-white w-[300px] h-[50px] rounded-xl p-2 ">
-       <input
-        className="w-full h-full bg-white outline-none text-black"
-        type="email"
-        name="email"
-        placeholder="name@gmail.com"
-        required
-       />
-      </div>
-     </div>
-
-     <div>
-      <h1 className="text-white font-Alegreya font-bold text-[16px] flex items-center gap-3 mb-2">
-       password
-      </h1>
-      <div className="name bg-white w-[300px] h-[50px] rounded-xl p-2 ">
-       <input
-        className="w-full h-full bg-white outline-none text-black"
-        type="password"
-        name="password"
-        placeholder="password"
-        required
-       />
-      </div>
-     </div>
-
-     <div>
-      <h1 className="text-white font-Alegreya font-bold text-[16px] flex items-center gap-3 mb-2">
-       confirm password
-      </h1>
-      <div className="name bg-white w-[300px] h-[50px] rounded-xl p-2 ">
-       <input
-        className="w-full h-full bg-white outline-none text-black"
-        type="password"
-        name="confirmPassword"
-        placeholder="confirmPassword"
-        required
-       />
-      </div>
-     </div>
-
-     <h1 className='capitalize font-Alegreya flex items-center gap-2 justify-center mt-2'>
-      already have an account ?
-      <Link to={'/signin'} className='text-blue-300'>sign in</Link>
-     </h1>
-
-     <button className="bg-[#ac2525] w-[300px] h-[50px] rounded mt-7">
+     {["name", "email", "password", "confirmPassword"].map((field, i) => (
       <input
-       className="cursor-pointer w-full text-white text-[30px] uppercase font-Alegreya font-bold"
-       type="submit"
-       value="sign up"
+       key={i}
+       type={field.includes("password") ? "password" : field === "email" ? "email" : "text"}
+       name={field}
+       placeholder={field.replace(/([A-Z])/g, " $1")}
+       required
+       className="w-full p-3 rounded bg-white text-black outline-none"
       />
+     ))}
+
+     <p className="text-sm">
+      Already have an account?
+      <Link to="/signin" className="text-blue-300 ml-1">Sign in</Link>
+     </p>
+
+     <button
+      type="submit"
+      className="w-full bg-[#ac2525] py-3 rounded text-white font-bold uppercase"
+     >
+      Sign Up
      </button>
 
     </form>
