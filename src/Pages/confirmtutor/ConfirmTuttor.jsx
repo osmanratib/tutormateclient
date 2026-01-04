@@ -12,7 +12,7 @@ const ConfirmTuttor = ({ cd, handleDelete }) => {
     <div className="flex items-center gap-3">
      <img
       className="w-12 h-12 sm:w-14 sm:h-14 rounded-full object-cover flex-shrink-0"
-      src={`https://tutormateadminserver.vercel.app/uploads/${image}`}
+      src={image} 
       alt={name}
      />
      <h1 className="text-sm sm:text-base truncate max-w-[120px] sm:max-w-xs">{name}</h1>
