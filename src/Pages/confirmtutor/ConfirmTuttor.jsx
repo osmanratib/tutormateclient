@@ -5,9 +5,9 @@ const ConfirmTuttor = ({ cd, handleDelete }) => {
  const { name, dept, _id, image } = cd;
 
  return (
-  <div className="px-3 sm:px-6 py-3">
+  <div className="px-3 sm:px-6 py-3 ">
    <div className="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center
-        border border-red-700 rounded-2xl bg-black px-4 sm:px-6 py-4
+        border-4 shadow-lg shadow-white border-red-700 rounded-2xl bg-black px-4 sm:px-6 py-4
         hover:shadow-lg hover:shadow-red-900/30 transition duration-300">
 
     {/* Tutor Profile */}
@@ -15,7 +15,7 @@ const ConfirmTuttor = ({ cd, handleDelete }) => {
      <img
       src={image}
       alt={name}
-      className="w-14 h-14 rounded-full object-cover border border-red-600"
+      className="w-14 h-14 rounded-full object-cover border border-red-600  "
      />
      <div className="overflow-hidden">
       <h2 className="text-sm sm:text-base font-semibold uppercase truncate">
