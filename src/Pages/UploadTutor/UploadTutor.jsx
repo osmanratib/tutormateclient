@@ -8,11 +8,22 @@ import Menu from "../../Components/Menu/Menu";
 
 const UploadTutor = () => {
 
- const handleSubmit = (e) => {
+ const handleSubmit = async (e) => {
   e.preventDefault();
   const form = e.target;
+  const file = form.file.files[0];
+
+  if (!file) {
+   Swal.fire({
+    title: 'Error',
+    text: 'Please select an image file',
+    icon: 'error',
+   });
+   return;
+  }
+
   const formData = new FormData();
-  formData.append('file', form.file.files[0]);
+  formData.append('file', file);
   formData.append('name', form.name.value);
   formData.append('dept', form.dept.value);
   formData.append('university', form.university.value);
@@ -20,41 +31,46 @@ const UploadTutor = () => {
   formData.append('exp', form.exp.value);
   formData.append('phone', form.phone.value);
 
-  Swal.fire({
-   title: 'Are you sure?',
-   text: 'Do you want to submit this form?',
-   icon: 'warning',
-   iconColor: 'red',
-   background: '#000000',
-   color: '#ffffff',
-   showCancelButton: true,
-   confirmButtonText: 'Yes, submit',
-   cancelButtonText: 'Cancel',
-   confirmButtonColor: 'red',
-   cancelButtonColor: '#aaa',
-  }).then((result) => {
+  try {
+   const result = await Swal.fire({
+    title: 'Are you sure?',
+    text: 'Do you want to submit this form?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Yes, submit',
+   });
+
    if (result.isConfirmed) {
-    fetch('https://tutormateadminserver.vercel.app/tutors', {
+    const response = await fetch('https://tutormateadminserver.vercel.app/tutors', {
      method: 'POST',
      body: formData,
-    })
-     .then(res => res.json())
-     .then(data => {
-      if (data.acknowledged) {
-       e.target.reset();
-       Swal.fire({
-        title: 'Submitted!',
-        icon: 'success',
-        iconColor: 'white',
-        background: '#000000',
-        color: '#ffffff',
-        timer: 3000
-       });
-      }
+    });
+
+    const data = await response.json();
+    if (data.acknowledged) {
+     form.reset();
+     Swal.fire({
+      title: 'Submitted!',
+      icon: 'success',
      });
+    } else {
+     Swal.fire({
+      title: 'Failed!',
+      text: data.error || 'Something went wrong',
+      icon: 'error',
+     });
+    }
    }
-  });
+  } catch (err) {
+   console.error(err);
+   Swal.fire({
+    title: 'Error',
+    text: 'Failed to upload image',
+    icon: 'error',
+   });
+  }
  };
+
 
  return (
   <div className="px-4 sm:px-8 lg:px-16 py-6">
