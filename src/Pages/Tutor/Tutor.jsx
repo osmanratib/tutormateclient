@@ -9,7 +9,7 @@ const Tutor = ({ data, handleConfirm, handleDelete }) => {
  return (
   <div className='bg-black border-[5px] shadow-2xl shadow-[#ffffff93] border-[#911f1f] lg:w-[400px] h-[540px] p-10 rounded-lg space-y-5 ' >
    <div className="photo flex justify-center">
-    <img className='w-[150x] h-[150px]' src={`https://tutormateadminserver.vercel.app/uploads/${data.image}`} alt="" />
+    <img className='w-[150x] h-[150px]' src={data.image} alt="" />
    </div>
    <div className="content space-y-2 font-Alegreya uppercase font-bold  ">
     <h1 className='text-[#98d2f9]'>{name}</h1>
