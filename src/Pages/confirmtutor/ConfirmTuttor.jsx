@@ -32,7 +32,6 @@ const ConfirmTuttor = ({ cd, handleDelete }) => {
     <div className="hidden sm:block sm:col-span-3 text-sm uppercase text-red-200">
      {dept}
     </div>
-
     {/* Actions */}
     <div className="sm:col-span-4 flex gap-3 justify-end">
      <Link to={`/tutors/${_id}`} className="w-full sm:w-auto">

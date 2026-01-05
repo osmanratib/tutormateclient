@@ -3,19 +3,24 @@ import Tutor from '../Tutor/Tutor';
 import Menu from '../../Components/Menu/Menu';
 import Swal from 'sweetalert2';
 
-
 const Tutors = () => {
-
  const [data, setData] = useState([]);
  const [confirm, setConfirm] = useState([]);
-
+ const [search, setSearch] = useState('');
 
  useEffect(() => {
   fetch('https://tutormate-server.vercel.app/tutors')
    .then(res => res.json())
    .then(data => setData(data));
- }, [])
+ }, []);
 
+ // 🔍 Search logic (search everything)
+ const filteredData = data.filter(tutor =>
+  Object.values(tutor)
+   .join(' ')
+   .toLowerCase()
+   .includes(search.toLowerCase())
+ );
 
  const handleConfirm = (data) => {
   Swal.fire({
@@ -32,46 +37,37 @@ const Tutors = () => {
    cancelButtonColor: '#aaa',
   }).then((result) => {
    if (result.isConfirmed) {
-    const newData = [...confirm, data];
-    setConfirm(newData);
+    setConfirm([...confirm, data]);
 
     fetch('https://tutormate-server.vercel.app/confirm', {
      method: 'POST',
-     headers: {
-      'Content-Type': 'application/json',
-     },
+     headers: { 'Content-Type': 'application/json' },
      body: JSON.stringify(data),
     })
      .then(res => res.json())
-     .then(result => {
+     .then(() => {
       Swal.fire({
        title: 'Confirmed!',
        icon: 'success',
-       iconColor: 'red',
        background: '#000000',
        color: '#ffffff',
        timer: 2000,
        showConfirmButton: false,
       });
-      console.log(result);
      });
    }
   });
  };
 
-
- // handle delete 
  const handleDelete = (_id) => {
   Swal.fire({
    title: 'Delete Tutor?',
    text: 'This action cannot be undone!',
    icon: 'warning',
-   iconColor: 'white',
    background: '#000000',
    color: '#ffffff',
    showCancelButton: true,
    confirmButtonText: 'Yes, delete',
-   cancelButtonText: 'Cancel',
    confirmButtonColor: '#d33',
    cancelButtonColor: '#aaa',
   }).then((result) => {
@@ -84,12 +80,11 @@ const Tutors = () => {
       if (result.deletedCount > 0) {
        setData(data.filter(item => item._id !== _id));
        Swal.fire({
-        title: 'Deleted !',
+        title: 'Deleted!',
         icon: 'success',
-        iconColor: 'white',
         background: '#000000',
         color: '#ffffff',
-        timer: 3000
+        timer: 2000,
        });
       }
      });
@@ -97,17 +92,44 @@ const Tutors = () => {
   });
  };
 
-
  return (
-  <div>
-   <div className='flex justify-center items-center'>
+  <div className="px-4">
+   <div className="flex justify-center items-center mb-6">
     <Menu />
    </div>
-   <h1 className='font-BBH text-center text-[40px] mb-10'>Tutors</h1>
 
-   <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
+   <h1 className="font-BBH text-center text-3xl md:text-[40px] mb-6">
+    Tutors
+   </h1>
+
+   {/* 🔍 Search Bar */}
+   <div className="flex justify-center m-10">
+    <input
+     type="text"
+     placeholder="Search tutors..."
+     className="w-full max-w-md px-4 py-2 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-red-500"
+     value={search}
+     onChange={(e) => setSearch(e.target.value)}
+    />
+   </div>
+
+   {/* Tutors Grid */}
+   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
     {
-     data.map(data => <Tutor key={data._id} data={data} handleDelete={handleDelete} handleConfirm={handleConfirm} />)
+     filteredData.length > 0 ? (
+      filteredData.map(tutor => (
+       <Tutor
+        key={tutor._id}
+        data={tutor}
+        handleDelete={handleDelete}
+        handleConfirm={handleConfirm}
+       />
+      ))
+     ) : (
+      <p className="text-center col-span-full text-gray-500">
+       No tutors found
+      </p>
+     )
     }
    </div>
   </div>
