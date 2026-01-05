@@ -2,16 +2,21 @@ import React, { useEffect, useState } from 'react';
 import Tutor from '../Tutor/Tutor';
 import Menu from '../../Components/Menu/Menu';
 import Swal from 'sweetalert2';
+import { Puff } from 'react-loader-spinner';
 
 const Tutors = () => {
  const [data, setData] = useState([]);
  const [confirm, setConfirm] = useState([]);
  const [search, setSearch] = useState('');
+ const [loading, setLoading] = useState(true);
 
  useEffect(() => {
   fetch('https://tutormate-server.vercel.app/tutors')
    .then(res => res.json())
-   .then(data => setData(data));
+   .then(data => {
+    setData(data);
+    setLoading(false);
+   });
  }, []);
 
  // 🔍 Search logic (search everything)
@@ -113,25 +118,39 @@ const Tutors = () => {
     />
    </div>
 
-   {/* Tutors Grid */}
-   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-    {
-     filteredData.length > 0 ? (
-      filteredData.map(tutor => (
-       <Tutor
-        key={tutor._id}
-        data={tutor}
-        handleDelete={handleDelete}
-        handleConfirm={handleConfirm}
-       />
-      ))
-     ) : (
-      <p className="text-center col-span-full text-gray-500">
-       No tutors found
-      </p>
-     )
-    }
-   </div>
+   {/* Loader / Tutors Grid */}
+   {
+    loading ? (
+     <div className="flex justify-center items-center h-[300px]">
+      <Puff
+       visible={true}
+       height="80"
+       width="80"
+       color="#4fa94d"
+       ariaLabel="puff-loading"
+      />
+     </div>
+    ) : (
+     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      {
+       filteredData.length > 0 ? (
+        filteredData.map(tutor => (
+         <Tutor
+          key={tutor._id}
+          data={tutor}
+          handleDelete={handleDelete}
+          handleConfirm={handleConfirm}
+         />
+        ))
+       ) : (
+        <p className="text-center col-span-full text-gray-500">
+         No tutors found
+        </p>
+       )
+      }
+     </div>
+    )
+   }
   </div>
  );
 };
