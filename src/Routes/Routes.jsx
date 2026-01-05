@@ -10,6 +10,8 @@ import ConfirmTutors from "../Pages/Confirmutors/ConfirmTutors";
 import TutorsDetail from "../Pages/TutorsDetail/TutorsDetail";
 import Users from "../Pages/Users/Users";
 import ProtectedRoute from "../ProtectedRoute/ProtectedRoute";
+import Students from "../Pages/Students/Students";
+import UploadStudents from "../Pages/uploadStudents/UploadStudents";
 
 export default function Routes() {
 
@@ -61,6 +63,18 @@ export default function Routes() {
       <Users />
      </ProtectedRoute>,
      loader: () => fetch('https://tutormate-server.vercel.app/users'),
+    },
+    {
+     path: '/students',
+     element: <ProtectedRoute>
+      <Students />
+     </ProtectedRoute>,
+    },
+    {
+     path: '/uploadStudents',
+     element: <ProtectedRoute>
+      <UploadStudents />
+     </ProtectedRoute>
     }
    ]
   },

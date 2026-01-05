@@ -32,23 +32,23 @@ export default function Menu() {
 
     {/* Menu Content */}
     <div className="mt-12 lg:px-6 bg-white">
-     <ul className="grid grid-cols-1 gap-10 justify-center items-center text-center text-lg font-extrabold bg-white"> 
+     <ul className="grid grid-cols-1 gap-10 justify-center items-center text-center text-lg font-extrabold bg-white">
       <h1 className='font-Alegreya text-[40px] p-5 rounded'>TutorMate</h1>
-     <Link to={'/'}>
+      <Link to={'/'}>
        <li className=" bg-white font-Alegreya cursor-pointer  text-[25px] lg:text-[30px] uppercase text-[#8f2121] hover:text-[#000000] transition">
         Home
        </li>
-     </Link>
-     <Link to={'/tutors'}>
+      </Link>
+      <Link to={'/tutors'}>
        <li className=" bg-white font-Alegreya cursor-pointer text-[25px] lg:text-[30px] uppercase text-[#8f2121] hover:text-[#000000] transition">
         Tutors
        </li>
-     </Link>
-     <Link to={'/users'}>
+      </Link>
+      <Link to={'/users'}>
        <li className=" bg-white font-Alegreya cursor-pointer text-[25px] lg:text-[30px] uppercase text-[#8f2121] hover:text-[#000000] transition">
-         users
+        users
        </li>
-     </Link>
+      </Link>
       <Link to={'/confirm'}>
        <li className=" bg-white font-Alegreya cursor-pointer text-[25px] lg:text-[30px] uppercase text-[#8f2121] hover:text-[#000000] transition">
         confirm tutors
@@ -56,10 +56,21 @@ export default function Menu() {
       </Link>
       <Link to={'/uploadTutor'}>
        <li className=" bg-white font-Alegreya cursor-pointer text-[25px] lg:text-[30px] uppercase text-[#8f2121] hover:text-[#000000] transition">
-        Upload details
+        teacher details
        </li>
       </Link>
-     </ul> 
+      <Link to={'/students'}>
+       <li className=" bg-white font-Alegreya cursor-pointer text-[25px] lg:text-[30px] uppercase text-[#8f2121] hover:text-[#000000] transition">
+        students
+       </li>
+      </Link>
+
+      <Link to={'/uploadStudents'}>
+       <li className=" bg-white font-Alegreya cursor-pointer text-[25px] lg:text-[30px] uppercase text-[#8f2121] hover:text-[#000000] transition">
+        Upload students
+       </li>
+      </Link>
+     </ul>
     </div>
    </Drawer>
   </Box>
