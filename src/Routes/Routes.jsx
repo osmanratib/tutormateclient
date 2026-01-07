@@ -69,6 +69,7 @@ export default function Routes() {
      element: <ProtectedRoute>
       <Students />
      </ProtectedRoute>,
+     loader: () => fetch('http://localhost:5000/students')
     },
     {
      path: '/uploadStudents',
