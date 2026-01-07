@@ -2,16 +2,17 @@ import React from 'react';
 
 const Tutor = ({ data, handleConfirm, handleDelete }) => {
 
- const { _id, name, dept, university, college, exp, phone } = data;
+ const { _id, name,tutorId ,  dept, university, college, exp, phone } = data;
 
 
 
  return (
-  <div className='bg-black border-[5px] shadow-2xl shadow-[#ffffff93] border-[#911f1f] lg:w-[400px] h-[540px] p-10 rounded-lg space-y-5 ' >
+  <div className='bg-black border-[5px] shadow-2xl shadow-[#ffffff93] border-[#911f1f] lg:w-[400px] h-[600px] p-10 rounded-lg space-y-5 ' >
    <div className="photo flex justify-center">
     <img className='w-[150x] h-[150px]' src={data.image} alt="" />
    </div>
-   <div className="content space-y-2 font-Alegreya uppercase font-bold  ">
+   <div className="content space-y-2 font-Alegreya uppercase font-bold  "> 
+    <h1 className='bg-[#247b7f] px-5 py-1 rounded-sm' >tutor id : {tutorId}</h1>
     <h1 className='text-[#98d2f9]'>{name}</h1>
     <h1>university name : <span className='bg-[#841515] px-5 py-1 rounded-3xl text-[12px]' > {university}</span> </h1>
     <h1>college : {college}</h1>
@@ -32,22 +33,3 @@ const Tutor = ({ data, handleConfirm, handleDelete }) => {
 };
 
 export default Tutor;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 

@@ -18,7 +18,6 @@ const ConfirmTutors = () => {
    });
  }, []);
 
- // 🔍 Search logic (search everything)
  const filteredData = confirmData.filter(item =>
   Object.values(item)
    .join(' ')
