@@ -1,27 +1,73 @@
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useEffect, useState } from "react";
+import {
+ AreaChart,
+ Area,
+ XAxis,
+ YAxis,
+ Tooltip,
+ Legend,
+ ResponsiveContainer,
+} from "recharts";
 
 const Chart = () => {
+ const [data, setData] = useState([]);
+
+ useEffect(() => {
+  const fetchData = async () => {
+   const tutorsRes = await fetch(
+    "https://tutormate-server.vercel.app/tutors"
+   );
+   const studentsRes = await fetch(
+    "https://tutormate-server.vercel.app/students"
+   );
+
+   const tutors = await tutorsRes.json();
+   const students = await studentsRes.json();
+
+   setData([
+    { name: "Start", tutors: 0, students: 0 },
+    { name: "Current", tutors: tutors.length, students: students.length },
+   ]);
+  };
+
+  fetchData();
+ }, []);
+
  return (
-  <div className="flex justify-center mt-24 lg:mt-20 w-full">
+  <div className="flex justify-center mt-20 w-full">
    <ResponsiveContainer width="95%" height={300}>
-    <LineChart
-     data={[
-      { name: 'Page A', uv: 4000, pv: 2400 },
-      { name: 'Page B', uv: 3000, pv: 1398 },
-      { name: 'Page C', uv: 2000, pv: 9800 },
-      { name: 'Page D', uv: 2780, pv: 3908 },
-      { name: 'Page E', uv: 1890, pv: 4800 },
-      { name: 'Page F', uv: 2390, pv: 3800 },
-      { name: 'Page G', uv: 3490, pv: 4300 },
-     ]}
-    >
-     {/* <CartesianGrid strokeDasharray="3 3" /> */}
-     <XAxis className="text-white" dataKey="name" />
+    <AreaChart data={data}>
+     <defs>
+      <linearGradient id="tutors" x1="0" y1="0" x2="0" y2="1">
+       <stop offset="5%" stopColor="#8884d8" stopOpacity={0.8} />
+       <stop offset="95%" stopColor="#8884d8" stopOpacity={0.1} />
+      </linearGradient>
+      <linearGradient id="students" x1="0" y1="0" x2="0" y2="1">
+       <stop offset="5%" stopColor="#82ca9d" stopOpacity={0.8} />
+       <stop offset="95%" stopColor="#82ca9d" stopOpacity={0.1} />
+      </linearGradient>
+     </defs>
+
+     <XAxis dataKey="name" />
      <YAxis />
      <Tooltip />
-     <Line type="monotone" dataKey="pv" stroke="#8884d8" activeDot={{ r: 8 }} />
-     <Line type="monotone" dataKey="uv" stroke="#82ca9d" />
-    </LineChart>
+     <Legend />
+
+     <Area
+      type="monotone"
+      dataKey="tutors"
+      stroke="#8884d8"
+      fill="url(#tutors)"
+      strokeWidth={2}
+     />
+     <Area
+      type="monotone"
+      dataKey="students"
+      stroke="#82ca9d"
+      fill="url(#students)"
+      strokeWidth={2}
+     />
+    </AreaChart>
    </ResponsiveContainer>
   </div>
  );
