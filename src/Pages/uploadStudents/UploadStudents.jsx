@@ -11,7 +11,7 @@ const UploadStudents = () => {
   const location = form.location.value;
   const user = { StudentId, phone, location };
 
-  fetch('http://localhost:5000/students', {
+  fetch('https://tutormate-server.vercel.app/students', {
    method: 'POST',
    headers: {
     "Content-Type": "application/json",

@@ -69,7 +69,7 @@ export default function Routes() {
      element: <ProtectedRoute>
       <Students />
      </ProtectedRoute>,
-     loader: () => fetch('http://localhost:5000/students')
+     loader: () => fetch('https://tutormate-server.vercel.app/students')
     },
     {
      path: '/uploadStudents',
