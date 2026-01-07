@@ -19,6 +19,8 @@ const SignIn = () => {
    Swal.fire({
     title: 'Welcome back!',
     icon: 'success',
+    background: "#fff",
+    color: "#000",
     timer: 1500,
     showConfirmButton: false
    });

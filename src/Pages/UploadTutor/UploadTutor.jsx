@@ -23,7 +23,8 @@ const UploadTutor = () => {
   }
 
   const formData = new FormData();
-  formData.append('file', file);
+  formData.append('file', file); 
+  formData.append('tutorId', form.tutorId.value);
   formData.append('name', form.name.value);
   formData.append('dept', form.dept.value);
   formData.append('university', form.university.value);
@@ -88,6 +89,7 @@ const UploadTutor = () => {
    >
     {/* Input Fields */}
     {[
+     { label: "Tutor ID", name: "tutorId", type: "text", icon: <IoMdPerson />, placeholder: "TUTOR-001" },
      { label: "Upload Image", name: "file", type: "file", icon: null, placeholder: "" },
      { label: "Name of the Tutor", name: "name", type: "text", icon: <IoMdPerson />, placeholder: "Name" },
      { label: "Name of the Department", name: "dept", type: "text", icon: <MdCastForEducation />, placeholder: "CSE" },
