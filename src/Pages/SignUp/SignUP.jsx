@@ -6,7 +6,7 @@ import Swal from "sweetalert2";
 import { sendEmailVerification } from "firebase/auth";
 
 const SignUP = () => {
- const { createUser, googleSignIn } = useContext(AuthContext);
+ const { createUser } = useContext(AuthContext);
  const navigate = useNavigate();
  const [error, setError] = useState("");
 
@@ -59,47 +59,12 @@ const SignUP = () => {
   }
  };
 
- // 🔹 Google Sign Up
- const handleGoogleSignUp = async () => {
-  setError("");
-  try {
-   const result = await googleSignIn();
-   const user = result.user;
-
-   await fetch("https://tutormate-server.vercel.app/users", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-     name: user.displayName,
-     email: user.email,
-    }),
-   });
-
-   Swal.fire({
-    icon: "success",
-    title: "Welcome!",
-    timer: 1500,
-   });
-
-   navigate("/");
-  } catch (err) {
-   setError(getErrorMessage(err.message));
-  }
- };
 
  return (
   <div className="min-h-screen flex items-center justify-center px-4">
    <div className="w-full max-w-md border-2 border-red-500 rounded-xl shadow-xl p-6 sm:p-8 text-center">
 
     <h1 className="text-2xl font-bold mb-4">Sign Up</h1>
-
-    {/* Google Sign Up */}
-    <button
-     onClick={handleGoogleSignUp}
-     className="w-full flex items-center justify-center gap-3 bg-white text-black py-2 rounded font-bold mb-4"
-    >
-     <FaGoogle /> Sign up with Google
-    </button>
 
     <div className="flex items-center gap-2 my-4">
      <div className="flex-1 h-px bg-white" />
